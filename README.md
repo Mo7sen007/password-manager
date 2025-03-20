@@ -21,7 +21,7 @@ cd password-manager
 
 ### Install Dependencies
 ```sh
-pip install .
+python setup.py install
 ```
 
 ## Usage
@@ -55,5 +55,5 @@ The application uses a `config.json` file to store settings. Ensure you configur
 This project is licensed under the MIT License.
 
 ---
-Developed by Mo7sen007
+Developed by Your Name
 
