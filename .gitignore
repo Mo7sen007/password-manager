@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environment
+venv/
+
+# Ignore secret files
+.env
+user_credentials.json
+passwords.json
+secret.key
+vault.enc
+
+
+# Ignore log files
+*.log
+logs/

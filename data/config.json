@@ -1,0 +1,5 @@
+{
+    "PASSWORD_FILE": "../data/passwords.json",
+    "KEY_FILE": "../data/secret.key",
+    "USER_CREDENTIALS_FILE": "../data/user_credentials.json"
+}
