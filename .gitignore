@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 *.pyo
 
+ui.py
 # Ignore virtual environment
 venv/
 
@@ -11,6 +12,7 @@ user_credentials.json
 passwords.json
 secret.key
 vault.enc
+
 
 
 # Ignore log files
