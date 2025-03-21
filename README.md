@@ -15,7 +15,7 @@ Ensure you have Python installed on your system. You can download it from [pytho
 
 ### Clone the Repository
 ```sh
-git clone https://github.com/yourusername/password-manager.git
+git clone https://github.com/Mo7sen007/password-manager.git
 cd password-manager
 ```
 
