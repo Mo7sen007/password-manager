@@ -30,7 +30,7 @@ python setup.py install
 python src/main.py
 ```
 
-### Commands
+### Options
 - **Add a Password**: Store a new password securely.
 - **Retrieve a Password**: Search for a stored password.
 - **Generate a Password**: Create a strong, random password.
@@ -55,5 +55,5 @@ The application uses a `config.json` file to store settings. Ensure you configur
 This project is licensed under the MIT License.
 
 ---
-Developed by Your Name
+Developed by Amir
 
