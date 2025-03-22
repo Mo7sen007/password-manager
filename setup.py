@@ -1,8 +1,6 @@
 from setuptools import setup, find_packages
 import os 
 
-
-
 def post_install():
     print("Running post-install setup...")
     os.system("python -m src.init_config")
