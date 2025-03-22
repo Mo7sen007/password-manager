@@ -4,10 +4,13 @@ import json
 
 
 def get_config_path():
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(BASE_DIR, "..", "data", "config.json")
-    config_path = os.path.abspath(config_path)
-    return config_path
+    BASE_DIR = os.getcwd() 
+    CONFIG_PATH = os.path.join(BASE_DIR, "data", "config.json") 
+
+    if not os.path.exists(CONFIG_PATH):
+        raise FileNotFoundError(f"Config file not found: {CONFIG_PATH}")
+
+    return CONFIG_PATH
 
 config_path = get_config_path()
 

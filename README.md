@@ -1,4 +1,4 @@
-# Password Manager
+# Password Manager v 1.3.1
 
 A simple and secure password manager that allows users to store, encrypt, and retrieve their passwords safely.
 
@@ -12,6 +12,7 @@ A simple and secure password manager that allows users to store, encrypt, and re
 ## Installation
 ### Prerequisites
 Ensure you have Python installed on your system. You can download it from [python.org](https://www.python.org/).
+Install xclip for Linux
 
 ### Clone the Repository
 ```sh
@@ -21,13 +22,13 @@ cd password-manager
 
 ### Install Dependencies
 ```sh
-python setup.py install
+pip install .
 ```
 
 ## Usage
 ### Running the Application
 ```sh
-python src/main.py
+password-manager
 ```
 
 ### Options
