@@ -1,6 +1,6 @@
-import utils as ut
-import storage
-import authenticat as auth
+from src import utils as ut
+from src import storage
+from src import authenticate as auth
 
 config = storage.load_config()
 PASSWORD_FILE = config["PASSWORD_FILE"]

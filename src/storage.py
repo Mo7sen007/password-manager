@@ -1,8 +1,7 @@
 import json
-from encryption import encrypt_data
-from encryption import load_key
+from src.encryption import encrypt_data, load_key,get_config_path
 
-CONFIG_PATH = "../data/config.json"
+CONFIG_PATH = get_config_path()
 
 def load_config():
     with open(CONFIG_PATH, "r") as config:

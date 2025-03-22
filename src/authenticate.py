@@ -1,7 +1,7 @@
 import bcrypt
 import json
 import os
-import storage as st
+import src.storage as st
 CONFIG_PATH = "../data/config.json"
 
 config = st.load_config()

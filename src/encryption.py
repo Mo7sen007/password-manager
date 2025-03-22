@@ -2,7 +2,14 @@ from cryptography.fernet import Fernet
 import os
 import json
 
-config_path = "../data/config.json"
+
+def get_config_path():
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(BASE_DIR, "..", "data", "config.json")
+    config_path = os.path.abspath(config_path)
+    return config_path
+
+config_path = get_config_path()
 
 with open(config_path, "r") as config:
     config = json.load(config)

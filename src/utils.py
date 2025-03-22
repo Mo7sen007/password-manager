@@ -6,15 +6,13 @@ import json
 from tabulate import tabulate
 from random import choice
 from string import ascii_letters, digits, punctuation
-from storage import load_passwords, save_passwords
-from encryption import decrypt_data, encrypt_data, load_key
+from src.storage import load_passwords, save_passwords,load_config
+from src.encryption import decrypt_data, encrypt_data, load_key
  
-config_path = "../data/config.json"
-
-with open(config_path, "r") as config:
-    config = json.load(config)
-    PASSWORD_FILE = config["PASSWORD_FILE"]
-    KEY_FILE = config["KEY_FILE"]
+config_file = load_config()
+print(config_file)
+PASSWORD_FILE = config_file["PASSWORD_FILE"]
+KEY_FILE = config_file["KEY_FILE"]
 
 def password_generator(length : int) -> str:
     MAX_LENGTH = 30
@@ -22,7 +20,10 @@ def password_generator(length : int) -> str:
         length = MAX_LENGTH
         print("Can not exeed 30 character")
     password = "".join(choice(ascii_letters + digits + punctuation) for _ in range(length))
-    return password
+    if password:
+        return password
+    else:
+        return "Error couldn't generate password"
 
 def copy_to_clipboard(password : str) -> None :
     if password:
@@ -133,7 +134,10 @@ def search_password(name: str, display_result: int, redirect_result: int, copy: 
     # Handle password copying
     if copy:
         password_number = get_valid_password_number(len(password_matches))
-        copy_selected_password(stored_passwords, password_matches, password_number, key)
+        if password_number > 0:
+            copy_selected_password(stored_passwords, password_matches, password_number, key)
+        else:
+            pass
 
     return password_matches if redirect_result else None
 
@@ -161,6 +165,8 @@ def get_valid_password_number(max_index: int) -> int:
     """Prompts the user for a valid password selection."""
     while True:
         user_input = input("Enter the number you want to copy: ").strip()
+        if user_input == "" :
+            return -1
         if user_input.isdigit():
             password_number = int(user_input) - 1
             if 0 <= password_number < max_index:
