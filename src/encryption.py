@@ -2,15 +2,20 @@ from cryptography.fernet import Fernet
 import os
 import json
 
-
 def get_config_path():
-    BASE_DIR = os.getcwd() 
-    CONFIG_PATH = os.path.join(BASE_DIR, "data", "config.json") 
+    """Returns the absolute path to the config file, ensuring cross-platform compatibility."""
+    if os.name == "nt":  # Windows
+        CONFIG_DIR = os.path.join(os.getenv("APPDATA"), "password-manager")
+    else:  # Linux/macOS
+        CONFIG_DIR = os.path.join(os.path.expanduser("~"), ".config", "password-manager")
 
-    if not os.path.exists(CONFIG_PATH):
-        raise FileNotFoundError(f"Config file not found: {CONFIG_PATH}")
+    CONFIG_PATH = os.path.join(CONFIG_DIR, "config.json")
+
+    # Ensure the config directory exists
+    os.makedirs(CONFIG_DIR, exist_ok=True)
 
     return CONFIG_PATH
+
 
 config_path = get_config_path()
 
