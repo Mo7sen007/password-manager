@@ -1,7 +1,9 @@
 import bcrypt
 import json
 import os
+import getpass 
 import src.storage as st
+
 CONFIG_PATH = "../data/config.json"
 
 config = st.load_config()
@@ -18,7 +20,7 @@ def verify_password(password, hashed_password):
     """ Verify a password against the stored hash. """
     return bcrypt.checkpw(password.encode(), hashed_password)
 
-def register_user(username, password):
+def register_user(username: str, password: str):
     """ Register a new user and store the hashed password. """
     if os.path.exists(USER_CREDENTIALS_FILE):
         with open(USER_CREDENTIALS_FILE, "r") as file:
@@ -50,17 +52,24 @@ def authenticate_user(username, password):
 
 def login_register():
     print("Welcome to Password Manager!")
-    if not os.path.exists(USER_CREDENTIALS_FILE):
-        print("Make an account")
+    key_file = config["KEY_FILE"]
+    if not os.path.exists(USER_CREDENTIALS_FILE) and not os.path.exists(key_file):
+        print("Create an account")
         username = input("Enter your username: ")
-        password = input("Enter your master password: ")
+        password = getpass.getpass("Enter your master password: ")
         register_user(username, password)
-    while True:
+    if not os.path.exists(USER_CREDENTIALS_FILE) and os.path.exists(key_file):
+        print("Error,couldn't fine USER_CREDENTIALS_FILE")
+        return 2
+    attempts = 3
+    while attempts > 0:
         username = input("Enter your username: ")
-        password = input("Enter your master password: ")
+        password = getpass.getpass("Enter your master password: ")
 
         if authenticate_user(username, password):
             print("Login successful!")
-            break  # Proceed to the main functionality of your password manager
+            break  # Proceed to the main functionality
         else:
             print("Invalid username or password. Try again.")
+            attempts -= 1
+    return 1 if attempts > 0 else 3 

@@ -2,17 +2,21 @@ import pyperclip
 import re
 import copy as cp
 from typing import List, Optional
-import json
 from tabulate import tabulate
 from random import choice
 from string import ascii_letters, digits, punctuation
+from src import authenticate as auth
 from src.storage import load_passwords, save_passwords,load_config
-from src.encryption import decrypt_data, encrypt_data, load_key
+from src.encryption import decrypt_data, encrypt_data, load_key, generate_key
  
 config_file = load_config()
-print(config_file)
 PASSWORD_FILE = config_file["PASSWORD_FILE"]
 KEY_FILE = config_file["KEY_FILE"]
+if KEY_FILE is None:
+    print("Critical Error: Encryption key is missing. Exiting.")
+    user_input = input("Creat new key (yes/no): ").strip()
+    if user_input == "yes":
+        generate_key(KEY_FILE)
 
 def password_generator(length : int) -> str:
     MAX_LENGTH = 30
@@ -326,4 +330,44 @@ def view_all() -> None:
 
     headers = ["No.", "Account Name", "Username", "Password"]
     print("\n" + tabulate(results, headers=headers, tablefmt="grid"))
+def compare_password_and_username(password: str, username: str, entry_email: str, entry_password:str, guessed_passwords: list) -> bool:
+    """Check if email and password match while ensuring they haven't been guessed before."""
+    return (
+        entry_email == username
+        and entry_password == password
+        and password not in guessed_passwords
+        and username not in guessed_passwords
+    )
 
+def restore() -> bool:
+    """Restore account by verifying two known passwords before allowing user to reset credentials."""
+    print("To restore your account, provide two known username-password pairs.")
+
+    key = load_key(KEY_FILE)
+    data = load_passwords(PASSWORD_FILE)
+    verified = False
+    passwords_guessed_correctly = 0
+    guessed_passwords = []
+
+    for _ in range(2):  # Allow two attempts to verify known passwords
+        username = input("Username: ").strip()
+        password = input("Password: ").strip()
+        if username in guessed_passwords and password in guessed_passwords:
+            print("Can't enter the same usernaem and password twice!")
+        for entry in data:
+            decrypted_password = decrypt_data(entry["password"], key)
+            if compare_password_and_username(password, username, entry["email"], decrypted_password, guessed_passwords):
+                print("Correct")
+                passwords_guessed_correctly += 1
+                guessed_passwords.extend([username, password])  
+
+        if passwords_guessed_correctly == 2:
+            verified = True
+            print("\nCreate a new account:")
+            new_username = input("New Username: ").strip()
+            new_password = input("New Master password: ").strip()
+            auth.register_user(new_username, new_password)
+            break  # Exit after successful restoration
+
+    return verified
+         

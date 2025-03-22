@@ -39,6 +39,4 @@ def init_config():
     with open(CONFIG_PATH, "w") as config_file:
         json.dump(config_data, config_file, indent=4)
     
-    
-
 init_config()

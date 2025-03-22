@@ -2,12 +2,27 @@ from src import utils as ut
 from src import storage
 from src import authenticate as auth
 
+
 config = storage.load_config()
 PASSWORD_FILE = config["PASSWORD_FILE"]
 KEY_FILE = config["KEY_FILE"]
 def main():
-    auth.login_register()
     """Command-line interface for the password manager."""
+
+    action = auth.login_register()
+    if action == 1:
+        pass
+    elif action == 3 or action == 2:
+        print("Couldn't authenticate user")
+        if action == 2:
+            print("We can't verify your identity without USER_CREDENTIALS_FILE")
+        user_input = input("restore account?(yes/no): ").strip()
+        if user_input == "yes":
+            restored = ut.restore()
+            if restored == False:
+                return
+        else:
+            return
     while True:
         print("\n- Password Manager -")
         print("1. Enter a new password")
