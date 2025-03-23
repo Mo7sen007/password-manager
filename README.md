@@ -1,4 +1,4 @@
-# Password Manager v 1.3.1
+# Password Manager v 1.5.0
 
 A simple and secure password manager that allows users to store, encrypt, and retrieve their passwords safely.
 
