@@ -370,4 +370,4 @@ def restore() -> bool:
             break  # Exit after successful restoration
 
     return verified
-         
+

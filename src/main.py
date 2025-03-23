@@ -1,7 +1,7 @@
 from src import utils as ut
 from src import storage
 from src import authenticate as auth
-
+from src.backup import start_auto_backup
 
 config = storage.load_config()
 PASSWORD_FILE = config["PASSWORD_FILE"]
@@ -60,4 +60,5 @@ def main():
 
 
 if __name__ == "__main__":
+    start_auto_backup(3600)
     main()
