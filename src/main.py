@@ -1,13 +1,15 @@
 from src import utils as ut
 from src import storage
 from src import authenticate as auth
-from src.backup import start_auto_backup
+from src.backup import start_auto_backup,backup_passwords
 
 config = storage.load_config()
 PASSWORD_FILE = config["PASSWORD_FILE"]
 KEY_FILE = config["KEY_FILE"]
 def main():
     """Command-line interface for the password manager."""
+    
+    ut.check_and_restore_files()
 
     action = auth.login_register()
     if action == 1:
@@ -38,6 +40,7 @@ def main():
             credentials = ut.enter_password()
             if credentials:
                 storage.save_password(*credentials, PASSWORD_FILE)
+                backup_passwords()
         elif choice == "2":
             search_name = input("Enter the name of the password you are looking for: ").strip()
             if search_name:
@@ -48,10 +51,12 @@ def main():
             update_name = input("Enter the name of the password you want to update: ").strip()
             if update_name:
                 ut.update_password(update_name)
+                backup_passwords()
         elif choice == "5":
             delete_name = input("Enter the name of the password you want to delete: ").strip()
             if delete_name:
                 ut.delete_password(delete_name)
+                backup_passwords()
         elif choice == "6":
             print("Exiting password manager. Stay safe!")
             break

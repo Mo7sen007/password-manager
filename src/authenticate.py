@@ -3,6 +3,7 @@ import json
 import os
 import getpass 
 import src.storage as st
+from src.backup import backup_key
 
 CONFIG_PATH = "../data/config.json"
 
@@ -34,7 +35,11 @@ def register_user(username: str, password: str):
     users[username] = hash_password(password).decode()  # Store hash as string
     with open(USER_CREDENTIALS_FILE, "w") as file:
         json.dump(users, file)
-
+    made_backup_copy_of_key = backup_key()
+    if made_backup_copy_of_key:
+        print("Made backup of key")
+    else:
+        print("Warring: couldn't make back up of key")
     return True  # Registration successful
 
 def authenticate_user(username, password):

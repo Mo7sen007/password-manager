@@ -29,6 +29,7 @@ def generate_key(KEY_FILE : str):
         key = Fernet.generate_key()
         with open(KEY_FILE, "wb") as key_file:
             key_file.write(key)
+    print("Generated key!")
 
 def load_key(KEY_FILE :str ) -> bytes | None:
     if not os.path.exists(KEY_FILE):
@@ -38,11 +39,19 @@ def load_key(KEY_FILE :str ) -> bytes | None:
         return key_file.read()
 
 def encrypt_data(data : str, key : bytes) -> str:
-    cipher = Fernet(key)
-    encrypted_data = cipher.encrypt(data.encode()).decode()
-    return encrypted_data
+    try:
+        cipher = Fernet(key)
+        encrypted_data = cipher.encrypt(data.encode()).decode()
+        return encrypted_data
+    except Exception as e:
+        print(f"Encryption failed: {e}")
+        return ""
 
 def decrypt_data(encrypted_data : str, key: bytes) -> str:
-    cipher = Fernet(key)
-    decrypted_data = cipher.decrypt(encrypted_data.encode()).decode()
-    return decrypted_data
+    try:
+        cipher = Fernet(key)
+        decrypted_data = cipher.decrypt(encrypted_data.encode()).decode()
+        return decrypted_data
+    except Exception as e:
+        print(f"Decryption failed:{e}")
+        return ""

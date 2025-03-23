@@ -1,11 +1,13 @@
 import pyperclip
 import re
+import os
 import copy as cp
 from typing import List, Optional
 from tabulate import tabulate
 from random import choice
 from string import ascii_letters, digits, punctuation
 from src import authenticate as auth
+from src.backup import restore_key, restore_passwords
 from src.storage import load_passwords, save_passwords,load_config
 from src.encryption import decrypt_data, encrypt_data, load_key, generate_key
  
@@ -17,6 +19,37 @@ if KEY_FILE is None:
     user_input = input("Creat new key (yes/no): ").strip()
     if user_input == "yes":
         generate_key(KEY_FILE)
+def check_and_restore_files() -> None:
+    """Checks if the key or password file is missing and asks the user if they want to restore them."""
+    config = load_config()
+    key_file = config["KEY_FILE"]
+    password_file = config["PASSWORD_FILE"]
+
+    missing_files = []
+
+    if not os.path.exists(key_file):
+        missing_files.append("key")
+
+    if not os.path.exists(password_file):
+        missing_files.append("passwords")
+
+    if not missing_files:
+        return  # Both files exist, no action needed
+
+    print("Warning: The following files are missing:", ", ".join(missing_files))
+
+    for file_type in missing_files:
+        restore = input(f"Do you want to attempt restoring the {file_type} file? (yes/no): ").strip().lower()
+        if restore == "yes":
+            if file_type == "key":
+                restored = restore_key()
+            else:
+                restored = restore_passwords()
+
+            if restored:
+                print(f"The {file_type} file has been successfully restored.")
+            else:
+                print(f"Failed to restore the {file_type} file.")
 
 def password_generator(length : int) -> str:
     MAX_LENGTH = 30

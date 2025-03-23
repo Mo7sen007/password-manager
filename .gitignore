@@ -3,7 +3,6 @@ __pycache__/
 *.pyo
 
 ui.py
-backup.py
 docs/
 # Ignore virtual environment
 venv/
