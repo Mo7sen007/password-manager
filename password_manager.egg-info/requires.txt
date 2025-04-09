@@ -1,4 +1,0 @@
-pyperclip
-cryptography
-tabulate
-bcrypt
