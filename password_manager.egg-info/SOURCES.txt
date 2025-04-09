@@ -1,0 +1,17 @@
+LICENSE.txt
+README.md
+setup.py
+password_manager.egg-info/PKG-INFO
+password_manager.egg-info/SOURCES.txt
+password_manager.egg-info/dependency_links.txt
+password_manager.egg-info/entry_points.txt
+password_manager.egg-info/requires.txt
+password_manager.egg-info/top_level.txt
+src/__init__.py
+src/authenticate.py
+src/backup.py
+src/encryption.py
+src/main.py
+src/storage.py
+src/ui.py
+src/utils.py

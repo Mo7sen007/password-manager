@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: password_manager
+Version: 1.5.0
+Summary: A secure password manager with encryption and clipboard support.
+Author: Mo7sen007
+Author-email: krombopulosmichael007@gmail.com
+Requires-Python: >=3.6
+License-File: LICENSE.txt
+Requires-Dist: pyperclip
+Requires-Dist: cryptography
+Requires-Dist: tabulate
+Requires-Dist: bcrypt
+Dynamic: author
+Dynamic: author-email
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
