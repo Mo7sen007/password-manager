@@ -6,9 +6,10 @@ from src.backup import start_auto_backup,backup_passwords
 config = storage.load_config()
 PASSWORD_FILE = config["PASSWORD_FILE"]
 KEY_FILE = config["KEY_FILE"]
+ut.clear_screen()
+
 def main():
     """Command-line interface for the password manager."""
-    ut.clear_screen()
     ut.check_and_restore_files()
 
     action = auth.login_register()

@@ -6,6 +6,8 @@ from src.backup import start_auto_backup,backup_passwords
 config = storage.load_config()
 PASSWORD_FILE = config["PASSWORD_FILE"]
 KEY_FILE = config["KEY_FILE"]
+ut.clear_screen()
+
 def main():
     """Command-line interface for the password manager."""
     ut.check_and_restore_files()
@@ -25,7 +27,6 @@ def main():
         else:
             return
     while True:
-        ut.clear_screen()
         print("\n- Password Manager -")
         print("1. Enter a new password")
         print("2. Search for a password")
