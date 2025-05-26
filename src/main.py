@@ -8,7 +8,7 @@ PASSWORD_FILE = config["PASSWORD_FILE"]
 KEY_FILE = config["KEY_FILE"]
 def main():
     """Command-line interface for the password manager."""
-    
+    ut.clear_screen()
     ut.check_and_restore_files()
 
     action = auth.login_register()

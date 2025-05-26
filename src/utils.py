@@ -1,6 +1,7 @@
 import pyperclip
 import re
 import os
+import platform
 import copy as cp
 from typing import List, Optional
 from tabulate import tabulate
@@ -403,3 +404,8 @@ def restore() -> bool:
 
     return verified
 
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system('cls')
+    else:
+        os.system('clear')

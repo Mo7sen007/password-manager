@@ -1,4 +1,4 @@
-# Psafe v 1.5.0
+# Psafe v 1.5.2
 
 A simple and secure password manager that allows users to store, encrypt, and retrieve their passwords safely.
 

@@ -8,7 +8,6 @@ PASSWORD_FILE = config["PASSWORD_FILE"]
 KEY_FILE = config["KEY_FILE"]
 def main():
     """Command-line interface for the password manager."""
-    
     ut.check_and_restore_files()
 
     action = auth.login_register()
@@ -26,6 +25,7 @@ def main():
         else:
             return
     while True:
+        ut.clear_screen()
         print("\n- Password Manager -")
         print("1. Enter a new password")
         print("2. Search for a password")
