@@ -217,7 +217,7 @@ def copy_selected_password(data: List[dict], password_matches: List[List[str]], 
     selected_entry = password_matches[password_number]
     for entry in data:
         if entry["name"] == selected_entry[1] and entry["email"] == selected_entry[2]:
-            copy_to_clipboard(entry["password"])
+            copy_to_clipboard(selected_entry[3])
             break
 
 def update_password(account_name: str):
@@ -353,14 +353,15 @@ def view_all() -> None:
         return
 
     print(f"\n- Found {len(data)} passwords -")
-
+    
     results = [
         [f"Password {i+1}", entry["name"], entry["email"], decrypt_data(entry["password"], key)]
         for i, entry in enumerate(data)
     ]
-
+    api_data = results.copy()
     headers = ["No.", "Account Name", "Username", "Password"]
     print("\n" + tabulate(results, headers=headers, tablefmt="grid"))
+    return api_data
 def compare_password_and_username(password: str, username: str, entry_email: str, entry_password:str, guessed_passwords: list) -> bool:
     """Check if email and password match while ensuring they haven't been guessed before."""
     return (

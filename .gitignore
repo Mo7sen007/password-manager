@@ -13,7 +13,7 @@ user_credentials.json
 passwords.json
 secret.key
 vault.enc
-
+backend/
 
 
 # Ignore log files
