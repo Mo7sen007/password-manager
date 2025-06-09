@@ -16,12 +16,13 @@ def get_config_path():
 
     return CONFIG_PATH
 
+if __name__ == "__main__":        
 
-config_path = get_config_path()
+    config_path = get_config_path()
 
-with open(config_path, "r") as config:
-    config = json.load(config)
-    KEY_FILE = config["KEY_FILE"]
+    with open(config_path, "r") as config:
+        config = json.load(config)
+        KEY_FILE = config["KEY_FILE"]
 
 
 def generate_key(KEY_FILE : str): 

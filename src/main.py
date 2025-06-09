@@ -1,15 +1,20 @@
 from src import utils as ut
 from src import storage
 from src import authenticate as auth
+from src import initialize as init
 from src.backup import start_auto_backup,backup_passwords
 
-config = storage.load_config()
-PASSWORD_FILE = config["PASSWORD_FILE"]
-KEY_FILE = config["KEY_FILE"]
-ut.clear_screen()
+
+#ut.clear_screen()
 
 def main():
     """Command-line interface for the password manager."""
+    init.init_config()
+    config = storage.load_config()
+    PASSWORD_FILE = config["PASSWORD_FILE"]
+    KEY_FILE = config["KEY_FILE"]
+    ut.ensure_key_exists()
+
     ut.check_and_restore_files()
 
     action = auth.login_register()

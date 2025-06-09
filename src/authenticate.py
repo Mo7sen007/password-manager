@@ -1,28 +1,33 @@
 import bcrypt
 import json
 import os
-import getpass 
+import getpass
 import src.storage as st
 from src.backup import backup_key
 
 CONFIG_PATH = "../data/config.json"
 
-config = st.load_config()
-
-USER_CREDENTIALS_FILE = config["USER_CREDENTIALS_FILE"]  # Path to store hashed passwords
-
+try:
+    config = st.load_config()
+    USER_CREDENTIALS_FILE = config["USER_CREDENTIALS_FILE"]
+except Exception as e:
+    config = {}
+    USER_CREDENTIALS_FILE = None
+    print(f"Warning: Failed to load config — {e}")
+print("debuging:")
+print(USER_CREDENTIALS_FILE)
 def hash_password(password):
-    """ Hash a password using bcrypt. """
     salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(password.encode(), salt)
-    return hashed
+    return bcrypt.hashpw(password.encode(), salt)
 
 def verify_password(password, hashed_password):
-    """ Verify a password against the stored hash. """
     return bcrypt.checkpw(password.encode(), hashed_password)
 
 def register_user(username: str, password: str):
-    """ Register a new user and store the hashed password. """
+    if not USER_CREDENTIALS_FILE:
+        print("Configuration error: USER_CREDENTIALS_FILE not set")
+        return False
+
     if os.path.exists(USER_CREDENTIALS_FILE):
         with open(USER_CREDENTIALS_FILE, "r") as file:
             users = json.load(file)
@@ -30,42 +35,40 @@ def register_user(username: str, password: str):
         users = {}
 
     if username in users:
-        return False  # Username already exists
+        return False
 
-    users[username] = hash_password(password).decode()  # Store hash as string
+    users[username] = hash_password(password).decode()
     with open(USER_CREDENTIALS_FILE, "w") as file:
         json.dump(users, file)
-    made_backup_copy_of_key = backup_key()
-    if made_backup_copy_of_key:
+
+    if backup_key():
         print("Made backup of key")
     else:
-        print("Warring: couldn't make back up of key")
-    return True  # Registration successful
+        print("Warning: couldn't make backup of key")
+
+    return True
 
 def authenticate_user(username, password):
-    """ Authenticate a user by verifying their password. """
-    if not os.path.exists(USER_CREDENTIALS_FILE):
-        return False  # No users registered
+    if not USER_CREDENTIALS_FILE or not os.path.exists(USER_CREDENTIALS_FILE):
+        return False
 
     with open(USER_CREDENTIALS_FILE, "r") as file:
         users = json.load(file)
 
-    if username not in users:
-        return False  # User not found
-
-    return verify_password(password, users[username].encode()) 
+    return username in users and verify_password(password, users[username].encode())
 
 def login_register():
     print("Welcome to Password Manager!")
-    key_file = config["KEY_FILE"]
-    if not os.path.exists(USER_CREDENTIALS_FILE) and not os.path.exists(key_file):
+    key_file = config.get("KEY_FILE")
+    if not USER_CREDENTIALS_FILE and not os.path.exists(key_file or ""):
         print("Create an account")
         username = input("Enter your username: ")
         password = getpass.getpass("Enter your master password: ")
         register_user(username, password)
-    if not os.path.exists(USER_CREDENTIALS_FILE) and os.path.exists(key_file):
-        print("Error,couldn't fine USER_CREDENTIALS_FILE")
+    elif not USER_CREDENTIALS_FILE and os.path.exists(key_file):
+        print("Error: couldn't find USER_CREDENTIALS_FILE")
         return 2
+
     attempts = 3
     while attempts > 0:
         username = input("Enter your username: ")
@@ -73,8 +76,14 @@ def login_register():
 
         if authenticate_user(username, password):
             print("Login successful!")
-            break  # Proceed to the main functionality
+            return 1
         else:
             print("Invalid username or password. Try again.")
             attempts -= 1
-    return 1 if attempts > 0 else 3 
+    return 3
+
+def main():
+    login_register()
+
+if __name__ == "__main__":
+    main()

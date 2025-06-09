@@ -11,6 +11,7 @@ src/__init__.py
 src/authenticate.py
 src/backup.py
 src/encryption.py
+src/initialize.py
 src/main.py
 src/storage.py
 src/ui.py

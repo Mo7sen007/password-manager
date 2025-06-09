@@ -6,7 +6,8 @@ ui.py
 docs/
 # Ignore virtual environment
 venv/
-
+password_manager/
+build/
 # Ignore secret files
 .env
 user_credentials.json

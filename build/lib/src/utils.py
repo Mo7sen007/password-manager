@@ -11,15 +11,24 @@ from src import authenticate as auth
 from src.backup import restore_key, restore_passwords
 from src.storage import load_passwords, save_passwords,load_config
 from src.encryption import decrypt_data, encrypt_data, load_key, generate_key
+if __name__ == "__main__":
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
+
+def ensure_key_exists():
+    config = load_config()
+    key_file = config["KEY_FILE"]
+
+    if not os.path.exists(key_file):
+        print("No encryption key found.")
+        user_input = input("Create new key? (yes/no): ").strip().lower()
+        if user_input == "yes":
+            generate_key(key_file)
+            print("New key created.")
+        else:
+            print("Key creation skipped.")
  
-config_file = load_config()
-PASSWORD_FILE = config_file["PASSWORD_FILE"]
-KEY_FILE = config_file["KEY_FILE"]
-if KEY_FILE is None:
-    print("Critical Error: Encryption key is missing. Exiting.")
-    user_input = input("Creat new key (yes/no): ").strip()
-    if user_input == "yes":
-        generate_key(KEY_FILE)
 def check_and_restore_files() -> None:
     """Checks if the key or password file is missing and asks the user if they want to restore them."""
     config = load_config()

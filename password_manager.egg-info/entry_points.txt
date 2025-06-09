@@ -1,2 +1,2 @@
 [console_scripts]
-Psafe = src.main:main
+psafe = src.main:main
