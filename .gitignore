@@ -4,6 +4,7 @@ __pycache__/
 
 ui.py
 docs/
+
 # Ignore virtual environment
 venv/
 password_manager/

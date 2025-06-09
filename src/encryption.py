@@ -16,27 +16,19 @@ def get_config_path():
 
     return CONFIG_PATH
 
-if __name__ == "__main__":        
 
-    config_path = get_config_path()
-
-    with open(config_path, "r") as config:
-        config = json.load(config)
-        KEY_FILE = config["KEY_FILE"]
-
-
-def generate_key(KEY_FILE : str): 
-    if not os.path.exists(KEY_FILE):
+def generate_key(KEY_FILE_PATH : str): 
+    if not os.path.exists(KEY_FILE_PATH):
         key = Fernet.generate_key()
-        with open(KEY_FILE, "wb") as key_file:
+        with open(KEY_FILE_PATH, "wb") as key_file:
             key_file.write(key)
     print("Generated key!")
 
-def load_key(KEY_FILE :str ) -> bytes | None:
-    if not os.path.exists(KEY_FILE):
+def load_key(KEY_FILE_PATH :str ) -> bytes | None:
+    if not os.path.exists(KEY_FILE_PATH):
         print("Can't find the KEY_FILE!")
         return None
-    with open(KEY_FILE, "rb") as key_file:
+    with open(KEY_FILE_PATH, "rb") as key_file:
         return key_file.read()
 
 def encrypt_data(data : str, key : bytes) -> str:

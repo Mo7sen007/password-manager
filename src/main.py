@@ -2,6 +2,7 @@ from src import utils as ut
 from src import storage
 from src import authenticate as auth
 from src import initialize as init
+from src import encryption
 from src.backup import start_auto_backup,backup_passwords
 
 
@@ -9,28 +10,30 @@ from src.backup import start_auto_backup,backup_passwords
 
 def main():
     """Command-line interface for the password manager."""
-    init.init_config()
+    full_init = init.init_config()
     config = storage.load_config()
     PASSWORD_FILE = config["PASSWORD_FILE"]
     KEY_FILE = config["KEY_FILE"]
-    ut.ensure_key_exists()
 
-    ut.check_and_restore_files()
-
-    action = auth.login_register()
-    if action == 1:
-        pass
-    elif action == 3 or action == 2:
-        print("Couldn't authenticate user")
-        if action == 2:
-            print("We can't verify your identity without USER_CREDENTIALS_FILE")
-        user_input = input("restore account?(yes/no): ").strip()
-        if user_input == "yes":
-            restored = ut.restore()
-            if restored == False:
+    if not(full_init):
+        ut.check_and_restore_files()
+        ut.ensure_key_exists()
+        action = auth.login_register(config, config["USER_CREDENTIALS_FILE"])
+        if action == 1:
+            pass
+        elif action == 3 or action == 2:
+            print("Couldn't authenticate user")
+            if action == 2:
+                print("We can't verify your identity without USER_CREDENTIALS_FILE")
+            user_input = input("restore account?(yes/no): ").strip()
+            if user_input == "yes":
+                restored = ut.restore()
+                if restored == False:
+                    return
+            else:
                 return
-        else:
-            return
+
+
     while True:
         print("\n- Password Manager -")
         print("1. Enter a new password")
@@ -45,7 +48,7 @@ def main():
         if choice == "1":
             credentials = ut.enter_password()
             if credentials:
-                storage.save_password(*credentials, PASSWORD_FILE)
+                storage.save_password(*credentials, PASSWORD_FILE, encryption.load_key(KEY_FILE))
                 backup_passwords()
         elif choice == "2":
             search_name = input("Enter the name of the password you are looking for: ").strip()

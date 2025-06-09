@@ -158,6 +158,9 @@ def search_password(name: str, display_result: int, redirect_result: int, copy: 
     Returns:
         Optional[List[List[str]]]: Returns a list of password entries if `redirect_result` is set to 1, otherwise None.
     """
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
     key = load_key(KEY_FILE)
     stored_passwords = load_passwords(PASSWORD_FILE)
     
@@ -232,6 +235,9 @@ def copy_selected_password(data: List[dict], password_matches: List[List[str]], 
 
 def update_password(account_name: str):
     """Updates an existing password entry."""
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
     
     key = load_key(KEY_FILE)
     passwords = load_passwords(PASSWORD_FILE)
@@ -300,6 +306,11 @@ def get_new_password() -> str:
 def update_entry_in_database(data: list, entry: list, new_name: str, new_username: str, new_password: str, key) -> bool:
     """Updates the selected password entry in the database and saves the changes."""
     
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
+    key = load_key(KEY_FILE)
+
     for record in data:
         if record["name"] == entry[1] and record["email"] == entry[2]:
             if new_name:
@@ -322,6 +333,11 @@ def update_entry_in_database(data: list, entry: list, new_name: str, new_usernam
 def delete_password(account_name: str) -> None:
     """Deletes a saved password based on the user's selection."""
     
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
+    key = load_key(KEY_FILE)
+
     matching_entries = search_password(account_name, display_result=1, redirect_result=1, copy=0)
     
     if not matching_entries:
@@ -354,7 +370,11 @@ def delete_password(account_name: str) -> None:
 
 def view_all() -> None:
     """Displays all saved passwords."""
-    
+
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
+
     key = load_key(KEY_FILE)
     data = load_passwords(PASSWORD_FILE)
     
@@ -385,6 +405,10 @@ def restore() -> bool:
     """Restore account by verifying two known passwords before allowing user to reset credentials."""
     print("To restore your account, provide two known username-password pairs.")
 
+    config_file = load_config()
+    PASSWORD_FILE = config_file["PASSWORD_FILE"]
+    KEY_FILE = config_file["KEY_FILE"]
+
     key = load_key(KEY_FILE)
     data = load_passwords(PASSWORD_FILE)
     verified = False
@@ -408,7 +432,7 @@ def restore() -> bool:
             print("\nCreate a new account:")
             new_username = input("New Username: ").strip()
             new_password = input("New Master password: ").strip()
-            auth.register_user(new_username, new_password)
+            auth.register_user(new_username, new_password,config_file["USER_CREDENTIALS_FILE"])
             break  # Exit after successful restoration
 
     return verified

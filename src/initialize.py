@@ -16,21 +16,25 @@ def get_config_dir():
         return os.path.join(os.getenv("XDG_CONFIG_HOME", os.path.expanduser("~/.config")), "password-manager")
 
 
-CONFIG_DIR = get_config_dir()
-CONFIG_PATH = os.path.join(CONFIG_DIR, "config.json")
-PASSWORD_PATH = os.path.join(CONFIG_DIR, "passwords.json")
-KEY_PATH = os.path.join(CONFIG_DIR, "secret.key")
-USER_CREDENTIALS_PATH = os.path.join(CONFIG_DIR, "user_credentials.json")
 
-config_data = {
-    "PASSWORD_FILE": PASSWORD_PATH,
-    "KEY_FILE": KEY_PATH,
-    "USER_CREDENTIALS_FILE": USER_CREDENTIALS_PATH
-}
 
 def init_config():
     """Ensure the config file is always stored in the fixed directory."""
+    
     print("initializing...")
+
+    CONFIG_DIR = get_config_dir()
+    CONFIG_PATH = os.path.join(CONFIG_DIR, "config.json")
+    PASSWORD_PATH = os.path.join(CONFIG_DIR, "passwords.json")
+    KEY_PATH = os.path.join(CONFIG_DIR, "secret.key")
+    USER_CREDENTIALS_PATH = os.path.join(CONFIG_DIR, "user_credentials.json")
+
+    config_data = {
+        "PASSWORD_FILE": PASSWORD_PATH,
+        "KEY_FILE": KEY_PATH,
+        "USER_CREDENTIALS_FILE": USER_CREDENTIALS_PATH
+    }
+    created_account = False
     os.makedirs(CONFIG_DIR, exist_ok=True)
 
     if os.path.exists(CONFIG_PATH):
@@ -50,8 +54,11 @@ def init_config():
         print("Config file created.")
         
     if not(os.path.exists(config_data["USER_CREDENTIALS_FILE"])):
-        login_register()
+        print("couldld not find user credentials ")
+        login_register(config_data, USER_CREDENTIALS_PATH)
+        created_account = True
     # Write new or updated config
     with open(CONFIG_PATH, "w") as config_file:
         json.dump(config_data, config_file, indent=4)
+    return created_account
     
