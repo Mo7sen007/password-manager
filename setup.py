@@ -6,7 +6,7 @@ def post_install():
     os.system("python -m src.init_config")
 setup(
     name="password_manager",
-    version="1.5.2.7.5",
+    version="1.5.3",
     author="Mo7sen007",
     author_email="krombopulosmichael007@gmail.com",
     description="A secure password manager with encryption and clipboard support.",
