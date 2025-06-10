@@ -1,13 +1,7 @@
 import os
-from random import choice
-from src.backup import restore_key, restore_passwords
-from src.storage import load_passwords, save_passwords,load_config,get_config_path
-from src.encryption import decrypt_data, encrypt_data, load_key, generate_key
 import json
-from src.authenticate import register_user,login_register
+from src.authenticate import login_register
  
-
-
 def get_config_dir():
     """Get the fixed config directory based on the operating system."""
     if os.name == "nt":
@@ -42,19 +36,19 @@ def init_config():
             try:
                 existing_data = json.load(config_file)
             except json.JSONDecodeError:
-                print("Warning: Config file is corrupted. Recreating it.")
+                print("Warning: Config file is corrupted. Recreating it.Error code: 22xxx ")
                 existing_data = {}
 
         if existing_data != config_data:
-            print("Alert: Overwriting outdated config file.")
+            print("Alert: Overwriting outdated config file.Error code: 21xxx ")
     else:
 
         with open(CONFIG_PATH, "w") as f:
             json.dump(config_data, f, indent=4)
         print("Config file created.")
         
-    if not(os.path.exists(config_data["USER_CREDENTIALS_FILE"])):
-        print("couldld not find user credentials ")
+    if not(os.path.exists(config_data["USER_CREDENTIALS_FILE"])) and not (os.path.exists(config_data["KEY_FILE"])):
+
         login_register(config_data, USER_CREDENTIALS_PATH)
         created_account = True
     # Write new or updated config

@@ -47,6 +47,7 @@ def check_and_restore_files() -> None:
         return  # Both files exist, no action needed
 
     print("Warning: The following files are missing:", ", ".join(missing_files))
+    print("Error code: 42xxx")
 
     for file_type in missing_files:
         restore = input(f"Do you want to attempt restoring the {file_type} file? (yes/no): ").strip().lower()
@@ -59,7 +60,8 @@ def check_and_restore_files() -> None:
             if restored:
                 print(f"The {file_type} file has been successfully restored.")
             else:
-                print(f"Failed to restore the {file_type} file.")
+                print(f"Error: Failed to restore the {file_type} file.")
+                print("Error code: 431xx")
 
 def password_generator(length : int) -> str:
     MAX_LENGTH = 30
@@ -70,7 +72,7 @@ def password_generator(length : int) -> str:
     if password:
         return password
     else:
-        return "Error couldn't generate password"
+        return "Error couldn't generate password, Error code: 432xx "
 
 def copy_to_clipboard(password : str) -> None :
     if password:
@@ -140,7 +142,7 @@ def enter_password() -> tuple[str, str, str] | None:
         password = input("Enter your password: ")
 
     if not name or not email or not password:
-        print("Error: Name, email, and password cannot be empty.")
+        print("Warning: Name, email, and password cannot be empty. Error code: 42xxx")
         return None
 
     return name, email, password
@@ -263,7 +265,7 @@ def update_password(account_name: str):
     if update_entry_in_database(passwords, matching_entries[entry_index], new_name, new_username, new_password, key):
         print("Password updated successfully!")
     else:
-        print("Couldn't update password.")
+        print("Error: Couldn't update password. Error code: 433xx")
 
 
 def get_valid_password_index(entries: list) -> int | None:
@@ -280,7 +282,7 @@ def get_valid_password_index(entries: list) -> int | None:
         if 0 <= index < len(entries):
             return index
         else:
-            print("Error: Invalid password number. Please try again.")
+            print("Alert: Invalid password number. Please try again.")
     
     return None
 
@@ -298,7 +300,7 @@ def get_new_password() -> str:
                 print(f"Generated Password: {new_password}")
                 return new_password
             else:
-                print("Invalid length. Enter a positive number.")
+                print("Alert: Invalid length. Enter a positive number.")
     
     return input("Enter the new password (leave empty to keep current): ").strip()
 
@@ -357,7 +359,7 @@ def delete_password(account_name: str) -> None:
     updated_data = [entry for entry in data if entry["name"] != password_to_delete]
 
     if len(updated_data) == len(data):
-        print("Error: Password not found.")
+        print("Alert: Password not found.")
     else:
         # Ask for confirmation before deleting
         confirm = input(f"Are you sure you want to delete '{highlight_match(password_to_delete,account_name, color = "red" )}'? (yes/no): ").strip().lower()

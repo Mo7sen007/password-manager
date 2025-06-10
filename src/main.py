@@ -3,14 +3,15 @@ from src import storage
 from src import authenticate as auth
 from src import initialize as init
 from src import encryption
+import os
 from src.backup import start_auto_backup,backup_passwords
 
 
-#ut.clear_screen()
 
 def main():
     """Command-line interface for the password manager."""
     full_init = init.init_config()
+    ut.clear_screen()
     config = storage.load_config()
     PASSWORD_FILE = config["PASSWORD_FILE"]
     KEY_FILE = config["KEY_FILE"]
@@ -19,6 +20,7 @@ def main():
         ut.check_and_restore_files()
         ut.ensure_key_exists()
         action = auth.login_register(config, config["USER_CREDENTIALS_FILE"])
+
         if action == 1:
             pass
         elif action == 3 or action == 2:
@@ -32,8 +34,7 @@ def main():
                     return
             else:
                 return
-
-
+    ut.clear_screen()
     while True:
         print("\n- Password Manager -")
         print("1. Enter a new password")

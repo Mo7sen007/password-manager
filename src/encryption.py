@@ -26,7 +26,7 @@ def generate_key(KEY_FILE_PATH : str):
 
 def load_key(KEY_FILE_PATH :str ) -> bytes | None:
     if not os.path.exists(KEY_FILE_PATH):
-        print("Can't find the KEY_FILE!")
+        print("Error: Can't find the KEY_FILE! Error code: 631xx")
         return None
     with open(KEY_FILE_PATH, "rb") as key_file:
         return key_file.read()
@@ -37,7 +37,7 @@ def encrypt_data(data : str, key : bytes) -> str:
         encrypted_data = cipher.encrypt(data.encode()).decode()
         return encrypted_data
     except Exception as e:
-        print(f"Encryption failed: {e}")
+        print(f"Error: Encryption failed: {e}, Error code: 632xx")
         return ""
 
 def decrypt_data(encrypted_data : str, key: bytes) -> str:
@@ -46,5 +46,5 @@ def decrypt_data(encrypted_data : str, key: bytes) -> str:
         decrypted_data = cipher.decrypt(encrypted_data.encode()).decode()
         return decrypted_data
     except Exception as e:
-        print(f"Decryption failed:{e}")
+        print(f"Error: Decryption failed:{e}, Error code: 633xx")
         return ""

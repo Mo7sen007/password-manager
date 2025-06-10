@@ -15,7 +15,7 @@ def verify_password(password, hashed_password):
 
 def register_user(username: str, password: str, USER_CREDENTIALS_FILE_PATH ):
     if not USER_CREDENTIALS_FILE_PATH:
-        print("Configuration error: USER_CREDENTIALS_FILE not set")
+        print("Configuration error: USER_CREDENTIALS_FILE not found, Error code: 33xxx")
         return False
 
     if os.path.exists(USER_CREDENTIALS_FILE_PATH):
@@ -34,7 +34,7 @@ def register_user(username: str, password: str, USER_CREDENTIALS_FILE_PATH ):
     if backup_key():
         print("Made backup of key")
     else:
-        print("Warning: couldn't make backup of key")
+        print("Warning: couldn't make backup of key, Error code: 321xx")
 
     return True
 
@@ -59,7 +59,7 @@ def login_register(config, USER_CREDENTIALS_FILE_PATH):
 
         register_user(username, password, USER_CREDENTIALS_FILE_PATH)
     elif not os.path.exists(USER_CREDENTIALS_FILE_PATH) and os.path.exists(key_file):
-        print("Error: couldn't find USER_CREDENTIALS_FILE")
+        print("Error: couldn't find USER_CREDENTIALS_FILE, Error code: 331xx")
         return 2
 
     attempts = 3

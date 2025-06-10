@@ -28,13 +28,13 @@ def load_config():
         with open(CONFIG_PATH, "r") as config_file:
             return json.load(config_file)
     except Exception as e:
-        print(f"Error loading config: {e}")
+        print(f"Error loading config: {e}, Error code: 531xx")
         return {}
 
 def save_password(name, email, password, PASSWORD_FILE, key):
     """Saves a new password."""
     if not key or not PASSWORD_FILE:
-        print("Error: Missing key or password file path.")
+        print("Error: Missing key or password file path. Error code: 532xx")
         return
 
     data = load_passwords(PASSWORD_FILE)
@@ -53,7 +53,7 @@ def save_passwords(data, PASSWORD_FILE):
         with open(PASSWORD_FILE, "w") as file:
             json.dump(data, file, indent=4)
     except Exception as e:
-        print(f"Error saving passwords: {e}")
+        print(f"Error saving passwords: {e}, Error code: 533xx")
 
 def load_passwords(PASSWORD_FILE):
     """Loads passwords from the JSON file."""
